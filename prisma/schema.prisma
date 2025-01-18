@@ -23,35 +23,37 @@ model User {
   image String?
   location String?
   website String?
-  createdAt DateTime @default(now())
+  createdAt DateTime @default(now()) // member since 2020
   updatedAt DateTime @updatedAt
 
-  // Relations
-  posts Post[] // one-to-many
-  comments Comment[] // one-to-many
-  likes Like[] // one-to-many
+  // Relations:
+  posts Post[] // One-to-many
+  comments Comment[] // One-to-many
+  likes Like[] // One-to-many
 
-  followers Follows[] @relation("following") // many-to-many
-  following Follows[] @relation("follower") // many-to-many
+  followers Follows[] @relation("following") // users who follow this user
+  following Follows[] @relation("follower") // users this user follows
 
-  notifications Notification[] @relation("userNotifications")
-  notificationsCreated Notification[] @relation("notificationCreator")
+  notifications Notification[] @relation("userNotifications") // notifications received by a user
+  notificationsCreated Notification[] @relation("notificationCreator") // notifications triggered by a user
 }
 
-model Post {
-  id String @id @default(cuid())
-  authorId String?
+
+model Post{
+  id        String    @id @default(cuid())
+  authorId String
   content String?
   image String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
   // Relations
-  author User @relation(fields: [authorId], references: [id], onDelete: Cascade) // delete all posts if the author is deleted
+  author User @relation(fields: [authorId],references: [id], onDelete: Cascade) // cascade delete means delete all posts if author is deleted
   comments Comment[]
   likes Like[]
   notifications Notification[]
 }
+
 
 model Comment {
   id String @id @default(cuid())
